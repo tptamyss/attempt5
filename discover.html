@@ -3,80 +3,561 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Mèow Việt - Discover</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --green: #84994F;
+            --dark-maroon: #3C0008;
+            --warm-yellow: #F4E5A1;
+            --soft-gray: #D9D9D9;
+            --vibrant-orange: #FFA726;
+        }
+
+        body {
+            font-family:Georgia:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color:var(white);
+            color:333;
+        }
+        
+        body {
+            padding-top: 100px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 0.6rem 1.5rem;
+            margin: 0.8rem auto;
+            max-width: 720px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(-50%) scale(0.98);
+        }
+
+        .navbar .container-fluid {
+            background: none !important;
+            box-shadow: none !important;
+        }
+
+        .navbar-brand img {
+            height: 45px;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: #000 !important;
+            font-weight: 700;
+            margin: 0 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #5C1E1E !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: #5C1E1E !important;
+            border-bottom: 2px solid #5C1E1E;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--dark-maroon) 0%, #8B3A3A 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 2rem 0 3rem 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            color: white;
+            font-weight: 700;
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* Section Headers */
+        .section-title {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 3rem 0 2rem 0;
+            text-align: center;
+        }
+        
+        /* Culture Cards Grid */
+        .culture-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .culture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .culture-card {
+            background: linear-gradient(135deg, var(--soft-gray) 0%, #e0e0e0 100%);
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .culture-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(232, 180, 184, 0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+        
+        .culture-card:hover::before {
+            left: 100%;
+        }
+        
+        .culture-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(92, 30, 30, 0.3);
+            background: linear-gradient(135deg, var(--green) 0%, #f5c5c9 100%);
+        }
+        
+        .culture-card i {
+            font-size: 3.5rem;
+            color: var(--dark-maroon);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .culture-card h3 {
+            font-size: 1.6rem;
+            color: var(--dark-maroon);
+            font-weight: 700;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .info-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            margin: 3rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .info-section h2 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--vibrant-orange);
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h4 {
+            color: var(--dark-maroon);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .info-card p {
+            color: #555;
+            line-height: 1.7;
+            margin: 0;
+            font-size: 1.05rem;
+        }
+        
+        .safety-section {
+            background: linear-gradient(135deg, var(--warm-yellow) 0%, #fff9d4 100%);
+            padding: 4rem 3rem;
+            border-radius: 15px;
+            margin: 3rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .safety-section h2 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .safety-section > p {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .safety-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .safety-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .safety-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .safety-card h4 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .safety-card p {
+            color: #666;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--dark-maroon) 0%, #8B3A3A 100%);
+            color: white;
+            border: none;
+            padding: 2rem;
+        }
+        
+        .modal-header h3 {
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .modal-body {
+            padding: 2.5rem;
+            background: #fafafa;
+        }
+        
+        .modal-body h4 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .modal-body p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: #444;
+        }
+        
+        .modal-body ul {
+            padding-left: 2rem;
+        }
+        
+        .modal-body ul li {
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <nav style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <img src="logo.png" alt="logo" style="height: 40px;">
-        <ul style="list-style: none; display: inline; margin: 0; padding: 0;">
-            <li style="display: inline; margin: 0 15px;"><a href="index.html" style="text-decoration: none; color: black;">Home</a></li>
-            <li style="display: inline; margin: 0 15px;"><a href="discover.html" style="text-decoration: none; color: black;">Discover</a></li>
-            <li style="display: inline; margin: 0 15px;"><a href="marketplace.html" style="text-decoration: none; color: black;">Marketplace</a></li>
-            <li style="display: inline; margin: 0 15px;"><a href="quiz.html" style="text-decoration: none; color: black;">Quiz</a></li>
-            <li style="display: inline; margin: 0 15px;"><a href="faq.html" style="text-decoration: none; color: black;">FAQs</a></li>
-        </ul>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="logo.png" alt="Mèo Ta Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="discover.html">Discover</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html">Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.html">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faq.html">FAQs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    <div>
-        <div>
-            <h1 style="font-size: 2.4rem;">Cats in Vietnamese Culture</h1>
+    <div class="container">
+
+        <div class="page-header">
+            <h1>Cats in Vietnamese Culture</h1>
         </div>
 
-        <div>
-            <div style="display: flex; gap: 20px; justify-content: space-around; margin-top: 30px;">
-                <div>
+        <!-- Culture Section -->
+        <div class="culture-section">
+            <div class="culture-grid">
+                <div class="culture-card" data-bs-toggle="modal" data-bs-target="#zodiacModal">
+                    <i class="bi bi-stars"></i>
                     <h3>Zodiac</h3>
                 </div>
-                <div>
+                <div class="culture-card" data-bs-toggle="modal" data-bs-target="#literatureModal">
+                    <i class="bi bi-book"></i>
                     <h3>In Literature & Art</h3>
                 </div>
-                <div>
-                    <h3>In Vietnamese Homes</h3>
+                <div class="culture-card" data-bs-toggle="modal" data-bs-target="#rolesModal">
+                    <i class="bi bi-house-heart"></i>
+                    <h3>Roles in Vietnamese Home</h3>
                 </div>
             </div>
         </div>
 
-        <div>
-            <h2 style="text-align: center;">Why meo ta?</h2>
-            <div style="display: flex; gap: 20px; justify-content: space-around; margin-top: 30px;">
+        <div class="info-section">
+            <h2>Why mèo ta?</h2>
+            <div class="info-grid">
                 <div class="info-card">
-                    <h4>Agriculture partner</h4>
-                    <p>Description</p>
+                    <h4>🌾 Agricultural Partners</h4>
+                    <p>Traditional Vietnamese households valued cats for protecting grain stores from rodents, making them essential partners in agricultural communities throughout history.</p>
                 </div>
-                <div>
-                    <h4>Climate adaptation</h4>
-                    <p>Description</p>
+                <div class="info-card">
+                    <h4>🌴 Climate Adaptation</h4>
+                    <p>These cats have adapted to Vietnam's tropical climate over generations, developing unique characteristics such as slender builds, short coats, and exceptional heat tolerance.</p>
                 </div>
-                <div>
-                    <h4>Intelligence and Loyalty</h4>
-                    <p>Description</p>
-                </div>
+                <div class="info-card">
+                    <h4>🧠 Intelligence & Loyalty</h4>
+                    <p>Vietnamese cats are renowned for their intelligence, loyalty to their families, and exceptional hunting instincts that made them invaluable to farmers.</p>
+                </div>                
             </div>
         </div>
 
-        <div>
-            <h2 style="text-align: center; font-size: 2rem;">Cat Safety Awareness</h2>
-            <p style="text-align: center;">Ensuring the wellbeing of ...</p>
-        </div>
-
-        <div style="display: flex; gap: 20px; justify-content: space-around; margin-top: 30px;">
-            <div>
-                <span>🏠</span>
-                <h4>Indoor Safety</h4>
-                <p>Description</p>
-            </div>
-            <div>
-                <span>🚗</span>
-                <h4>Traffic awareness</h4>
-                <p>Description</p>
-            </div>
-            <div>
-                <span>💉</span>
-                <h4>Vaccination</h4>
-                <p>Description</p>
+        <!--Cat safety awareness-->
+        <div class="safety-section">
+            <h2>Cat Safety Awareness</h2>
+            <p>Ensuring the wellbeing of Mèo Ta is our priority. Here are essential safety considerations for Vietnamese cat owners:</p>
+            
+            <div class="safety-grid">
+                <div class="safety-card">
+                    <span class="safety-icon">🏠</span>
+                    <h4>Indoor Safety</h4>
+                    <p>Secure windows and balconies, especially in high-rise buildings common in Vietnamese cities. Use screens or nets to prevent falls.</p>
+                </div>
+                <div class="safety-card">
+                    <span class="safety-icon">🌡️</span>
+                    <h4>Heat Management</h4>
+                    <p>Provide cooling areas, shade, and constant access to fresh water during hot Vietnamese summers to prevent heatstroke.</p>
+                </div>
+                <div class="safety-card">
+                    <span class="safety-icon">💉</span>
+                    <h4>Vaccinations</h4>
+                    <p>Keep up with regular vaccinations and deworming. Consult with veterinarians about diseases common in tropical climates.</p>
+                </div>
+                <div class="safety-card">
+                    <span class="safety-icon">🚗</span>
+                    <h4>Traffic Awareness</h4>
+                    <p>Keep cats indoors or supervised outdoors in urban areas with heavy motorbike and vehicle traffic to prevent accidents.</p>
+                </div>
+                <div class="safety-card">
+                    <span class="safety-icon">🍖</span>
+                    <h4>Proper Nutrition</h4>
+                    <p>Feed appropriate cat food and avoid sharing human food, especially dishes with bones, onions, or spicy seasonings.</p>
+                </div>
+                <div class="safety-card">
+                    <span class="safety-icon">🏥</span>
+                    <h4>Regular Check-ups</h4>
+                    <p>Schedule annual veterinary visits for health monitoring, dental care, and early detection of potential health issues.</p>
+                </div>
             </div>
         </div>
     </div>
+
+    <!--Modals-->
+    <div class="modal fade" id="zodiacModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">The Cat in Vietnamese Zodiac</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>In Vietnamese astrology, the Cat (Mèo) replaces the Rabbit found in the Chinese zodiac, making Vietnam one of the few countries with this unique variation. This reflects the deep bond between Vietnamese people and cats throughout history.</p>
+                    
+                    <h4>The Year of the Cat (Năm Mão)</h4>
+                    <p>The fourth position in the Vietnamese zodiac belongs to the Cat, representing those born in years such as 1963, 1975, 1987, 1999, 2011, and 2023. People born in the Year of the Cat are believed to possess special qualities:</p>
+                    <ul>
+                        <li>Grace, elegance, and refinement in appearance and behavior</li>
+                        <li>Intelligence, quick wit, and excellent problem-solving abilities</li>
+                        <li>Diplomatic nature with strong interpersonal skills</li>
+                    </ul>
+                    
+                    <h4>Cultural Origins</h4>
+                    <p>The substitution of the Cat for the Rabbit in Vietnamese zodiac has several theories. Some scholars suggest it relates to the Vietnamese word "mão" (卯) which sounds similar to "mèo" (cat). Others believe it reflects the practical importance of cats in Vietnamese agricultural society, where they protected grain stores more effectively than rabbits.</p>
+
+                    <h4>Symbolic Meaning</h4>
+                    <p>In Vietnamese culture, cats symbolize good fortune, flexibility, and the ability to land on one's feet during difficult times. The Year of the Cat is considered favorable for new beginnings, careful planning, and artistic pursuits.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="literatureModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Cats in Vietnamese Literature & Art</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <h4>Folk Tales and Legends</h4>
+                    <p>Vietnamese folklore features numerous stories where cats play important roles as clever, mysterious, or protective characters. These tales often portray cats as having supernatural abilities or serving as messengers between the human and spirit worlds.</p>
+
+                    <p>One popular folk belief holds that a cat washing its face predicts the arrival of guests. Another tradition suggests that a black cat crossing your path brings good fortune, contrary to Western superstitions.</p>
+                    
+                    <h4>Traditional Visual Arts</h4>
+                    <p>In traditional Vietnamese paintings and woodblock prints, cats often appear in domestic scenes, symbolizing prosperity and peaceful family life. The famous Đông Hồ folk paintings from Bắc Ninh province frequently feature cats alongside symbols of wealth and happiness.</p>
+
+                    <p>During the Lunar New Year, images of cats are sometimes displayed alongside traditional lucky symbols, representing wishes for a peaceful and prosperous year ahead.</p>
+                    
+                    <h4>Modern Vietnamese Literature</h4>
+                    <p>Contemporary Vietnamese writers continue to feature cats as important characters in their works. Notable examples include stories exploring themes of loyalty, independence, and the connection between traditional and modern Vietnamese life.</p>
+
+                    <p>The cat serves as a metaphor for the Vietnamese spirit—adaptable, resilient, dignified, and always landing on their feet despite challenges. This symbolism resonates deeply with Vietnam's historical experience and national character.</p>
+
+                    <h4>Proverbs and Sayings</h4>
+                    <p>Vietnamese language contains many proverbs featuring cats:</p>
+                    <ul>
+                        <li>"Mèo khen mèo dài đuôi" (A cat praises another cat's long tail) - equivalent to mutual flattery</li>
+                        <li>"Như mèo với chuột" (Like cat and mouse) - describing sworn enemies</li>
+                        <li>"Mèo mà hiền, chuột lên mâm" (When the cat is gentle, mice climb on the altar) - about being too lenient</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="rolesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Roles of Cats in Vietnamese Homes</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Historical Agricultural Role</h4>
+                    <p>In rural Vietnam, cats were essential for protecting stored rice and grains from rats and mice. This practical role made them valued members of farming households, where food security depended on effective pest control. A good mouser was considered as valuable as any farming tool.</p>
+                    
+                    <h4>Spiritual Guardians</h4>
+                    <p>Vietnamese families traditionally believed cats could ward off evil spirits and bring good fortune to the household. Their nocturnal nature and keen senses were thought to allow them to detect supernatural presences invisible to humans.</p>
+
+                    <p>Some Vietnamese believe that cats can see spirits and will react defensively when encountering malevolent entities, protecting the family from unseen dangers. This belief strengthens the bond between cats and their human families.</p>
+                    
+                    <h4>Modern Urban Living</h4>
+                    <p>In contemporary Vietnamese cities like Hanoi and Ho Chi Minh City, cats have adapted remarkably well to apartment living while maintaining their independent nature. They provide companionship in smaller living spaces and require less space and maintenance than dogs, making them ideal pets for urban Vietnamese families.</p>
+
+                    <p>The rise of cat cafés across Vietnam reflects growing urbanization and the desire for animal companionship among young professionals who may not have space or time for traditional pet ownership.</p>
+                    
+                    <h4>Symbol of Home and Comfort</h4>
+                    <p>The presence of a cat in a Vietnamese home symbolizes warmth, security, and domestic harmony. They represent the bridge between traditional values and modern life, maintaining their role as beloved household members across generations.</p>
+
+                    <p>Many Vietnamese families consider their cats as full family members, celebrating their birthdays and including them in family photos and social media posts, showing how deeply embedded cats are in contemporary Vietnamese family life.</p>
+
+                    <h4>Community and Social Bonds</h4>
+                    <p>Cats also serve as social connectors in Vietnamese neighborhoods. Neighbors often share stories about local cats, work together to feed strays, and form community bonds through their shared care for feline friends. This collective responsibility reflects traditional Vietnamese values of community care and compassion.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
 </body>
 </html>
