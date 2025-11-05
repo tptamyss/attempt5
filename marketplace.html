@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mèow Việt - Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --green: #84994F;
+            --dark-maroon: #3C0008;
+            --warm-yellow: #F4E5A1;
+            --soft-gray: #D9D9D9;
+            --vibrant-orange: #FFA726;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding-top: 100px;
+        }
+        
+        /* Bubble-style Navbar - EXACT same as index.html */
+        .navbar {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 0.6rem 1.5rem;
+            margin: 0.8rem auto;
+            max-width: 720px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(-50%) scale(0.98);
+        }
+
+        .navbar .container-fluid {
+            background: none !important;
+            box-shadow: none !important;
+        }
+
+        .navbar-brand img {
+            height: 45px;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: #000 !important;
+            font-weight: 700;
+            margin: 0 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #5C1E1E !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: #5C1E1E !important;
+            border-bottom: 2px solid #5C1E1E;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--warm-yellow) 0%, #fff9d4 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 2rem 0 3rem 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h1 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        
+        /* Filter Sidebar */
+        .filter-sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 120px;
+        }
+        
+        .filter-sidebar h5 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .filter-group {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+        
+        .filter-group:last-child {
+            border-bottom: none;
+        }
+        
+        .filter-group h6 {
+            color: var(--dark-maroon);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+        
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
+            margin-right: 0.75rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .filter-option label {
+            cursor: pointer;
+            margin: 0;
+            color: #555;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .price-inputs input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--soft-gray);
+            border-radius: 5px;
+        }
+        
+        .apply-filter-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--vibrant-orange);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .apply-filter-btn:hover {
+            background: #ff9800;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 167, 38, 0.3);
+        }
+        
+        /* Cat Grid */
+        .cats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .cat-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .cat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .cat-image {
+            width: 100%;
+            height: 220px;
+            background: var(--soft-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 3rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .cat-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cat-info {
+            background: var(--soft-gray);
+            padding: 1.25rem;
+            color: var(--dark-maroon);
+        }
+        
+        .cat-info h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .cat-detail {
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .cat-detail i {
+            width: 16px;
+        }
+        
+        .cat-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .view-detail-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: white;
+            color: var(--dark-maroon);
+            border: 2px solid var(--dark-maroon);
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-detail-btn:hover {
+            background: var(--dark-maroon);
+            color: white;
+        }
+        
+        /* Modal */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--dark-maroon) 0%, #8B3A3A 100%);
+            color: white;
+            border: none;
+            padding: 2rem;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .modal-cat-image {
+            width: 100%;
+            height: 300px;
+            background: var(--soft-gray);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .modal-info-item {
+            padding: 1rem;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+        
+        .modal-info-item strong {
+            color: var(--dark-maroon);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-description {
+            line-height: 1.8;
+            color: #555;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="logo.png" alt="Mèo Ta Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="discover.html">Discover</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="marketplace.html">Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.html">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faq.html">FAQs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Find your purrfect Mèo ta</h1>
+        </div>
+
+        <div class="row">
+            <!-- Filter Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="filter-sidebar">
+                    <!-- Search -->
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Search by name, breed..." id="searchInput">
+                    </div>
+
+                    <!-- Location Filter -->
+                    <div class="filter-group">
+                        <h6><i class="bi bi-geo-alt-fill"></i> Location</h6>
+                        <div class="filter-option">
+                            <input type="radio" name="location" id="hanoi" value="hanoi" checked>
+                            <label for="hanoi">Hanoi</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="location" id="hcm" value="hcm">
+                            <label for="hcm">Ho Chi Minh City</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="location" id="danang" value="danang">
+                            <label for="danang">Da Nang</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="location" id="other" value="other">
+                            <label for="other">Other cities</label>
+                        </div>
+                    </div>
+
+                    <!-- Age Filter -->
+                    <div class="filter-group">
+                        <h6><i class="bi bi-calendar-heart"></i> Age</h6>
+                        <div class="filter-option">
+                            <input type="checkbox" id="kitten">
+                            <label for="kitten">Kitten (0 - 12 months)</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="young">
+                            <label for="young">Young (1 - 3 years)</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="adult">
+                            <label for="adult">Adult (3 - 7 years)</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="senior">
+                            <label for="senior">Senior (7+ years)</label>
+                        </div>
+                    </div>
+
+                    <!-- Gender Filter -->
+                    <div class="filter-group">
+                        <h6><i class="bi bi-gender-ambiguous"></i> Gender</h6>
+                        <div class="filter-option">
+                            <input type="checkbox" id="male">
+                            <label for="male">Male</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="female">
+                            <label for="female">Female</label>
+                        </div>
+                    </div>
+
+                    <!-- Breed Filter -->
+                    <div class="filter-group">
+                        <h6><i class="bi bi-heart-fill"></i> Breed</h6>
+                        <div class="filter-option">
+                            <input type="checkbox" id="tam-the">
+                            <label for="tam-the">Mèo Tam Thể</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="cam">
+                            <label for="cam">Mèo Cam</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="mun">
+                            <label for="mun">Mèo Mun</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="muop">
+                            <label for="muop">Mèo Mướp</label>
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="filter-group">
+                        <h6><i class="bi bi-currency-dollar"></i> Price Range</h6>
+                        <div class="price-inputs">
+                            <input type="number" placeholder="Min" id="minPrice">
+                            <input type="number" placeholder="Max" id="maxPrice">
+                        </div>
+                    </div>
+
+                    <button class="apply-filter-btn" onclick="applyFilters()">Apply Filter</button>
+                </div>
+            </div>
+
+            <!-- Cat Listings -->
+            <div class="col-lg-9">
+                <div class="cats-container" id="catsContainer">
+                    <!-- Cat Card 1 -->
+                    <div class="cat-card" data-bs-toggle="modal" data-bs-target="#catModal1">
+                        <div class="cat-image">
+                            <img src="images/calico2.jpg" alt="Calico 1">
+                        </div>
+                        <div class="cat-info">
+                            <h4>Miu - Calico Female</h4>
+                            <div class="cat-detail">
+                                <i class="bi bi-geo-alt"></i> Hanoi
+                            </div>
+                            <div class="cat-detail">
+                                <i class="bi bi-calendar"></i> 6 months
+                            </div>
+                            <div class="cat-price">💰 0 VND</div>
+                            <button class="view-detail-btn">View Detail</button>
+                        </div>
+                    </div>
+
+                    <!-- Cat Card 2 -->
+                    <div class="cat-card" data-bs-toggle="modal" data-bs-target="#catModal2">
+                        <div class="cat-image">
+                            <img src="images/orange2.jpg" alt="">
+                        </div>
+                        <div class="cat-info">
+                            <h4>Cam - Orange Male</h4>
+                            <div class="cat-detail">
+                                <i class="bi bi-geo-alt"></i> Hanoi
+                            </div>
+                            <div class="cat-detail">
+                                <i class="bi bi-calendar"></i> 8 months
+                            </div>
+                            <div class="cat-price">💰 200,000 VND</div>
+                            <button class="view-detail-btn">View Detail</button>
+                        </div>
+                    </div>
+
+                    <!-- Cat Card 3 -->
+                    <div class="cat-card" data-bs-toggle="modal" data-bs-target="#catModal3">
+                        <div class="cat-image">
+                            <img src="images/black1.jpg" alt="">
+                        </div>
+                        <div class="cat-info">
+                            <h4>Bin - Black Female</h4>
+                            <div class="cat-detail">
+                                <i class="bi bi-geo-alt"></i> Ho Chi Minh City
+                            </div>
+                            <div class="cat-detail">
+                                <i class="bi bi-calendar"></i> 4 months
+                            </div>
+                            <div class="cat-price">💰 350,000 VND</div>
+                            <button class="view-detail-btn">View Detail</button>
+                        </div>
+                    </div>
+
+                    <!-- Cat Card 4 -->
+                    <div class="cat-card" data-bs-toggle="modal" data-bs-target="#catModal4">
+                        <div class="cat-image">
+                            <img src="images/tabby1.jpg" alt="">
+                        </div>
+                        <div class="cat-info">
+                            <h4>Mướp - Tabby Male</h4>
+                            <div class="cat-detail">
+                                <i class="bi bi-geo-alt"></i> Hanoi
+                            </div>
+                            <div class="cat-detail">
+                                <i class="bi bi-calendar"></i> 1 year
+                            </div>
+                            <div class="cat-price">💰 100,000 VND</div>
+                            <button class="view-detail-btn">View Detail</button>
+                        </div>
+                    </div>
+
+                    <!-- Cat Card 5 -->
+                    <div class="cat-card">
+                        <div class="cat-image">
+                            <img src="images/black2.jpg" alt="">
+                        </div>
+                        <div class="cat-info">
+                            <h4>Choco - Black Female</h4>
+                            <div class="cat-detail">
+                                <i class="bi bi-geo-alt"></i> Da Nang
+                            </div>
+                            <div class="cat-detail">
+                                <i class="bi bi-calendar"></i> 5 months
+                            </div>
+                            <div class="cat-price">💰 150,000 VND</div>
+                            <button class="view-detail-btn">View Detail</button>
+                        </div>
+                    </div>
+
+                    <!-- Cat Card 6 -->
+                    <div class="cat-card">
+                        <div class="cat-image">
+                            <img src="images/tabby2.jpg" alt="">
+                        </div>
+                        <div class="cat-info">
+                            <h4>Luck - Tabby Male</h4>
+                            <div class="cat-detail">
+                                <i class="bi bi-geo-alt"></i> Hanoi
+                            </div>
+                            <div class="cat-detail">
+                                <i class="bi bi-calendar"></i> 3 months
+                            </div>
+                            <div class="cat-price">💰 200,000 VND</div>
+                            <button class="view-detail-btn">View Detail</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cat Detail Modal -->
+    <div class="modal fade" id="catModal1" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Miu - Tam Thể Female</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-cat-image">
+                        <i class="bi bi-image" style="font-size: 4rem; color: #999;"></i>
+                    </div>
+                    <div class="modal-info-grid">
+                        <div class="modal-info-item">
+                            <strong>Location</strong>
+                            Hanoi
+                        </div>
+                        <div class="modal-info-item">
+                            <strong>Age</strong>
+                            6 months
+                        </div>
+                        <div class="modal-info-item">
+                            <strong>Gender</strong>
+                            Female
+                        </div>
+                        <div class="modal-info-item">
+                            <strong>Price</strong>
+                            0 VND
+                        </div>
+                    </div>
+                    <div class="modal-description">
+                        <h5 style="color: var(--dark-maroon); font-weight: 700;">About Miu</h5>
+                        <p>Miu is a beautiful Tam Thể (tri-color) kitten with a playful and affectionate personality. She loves to play with toys and is very sociable with both humans and other cats. Miu is healthy, vaccinated, and dewormed. She would be perfect for families looking for an active and loving companion.</p>
+                        <p><strong>Health:</strong> Fully vaccinated, dewormed<br>
+                        <strong>Temperament:</strong> Playful, affectionate, sociable<br>
+                        <strong>Contact:</strong> 0123-456-789</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional modals for other cats can be added similarly -->
+    <div class="modal fade" id="catModal2" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Cam - Orange Male</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-cat-image">
+                        <i class="bi bi-image" style="font-size: 4rem; color: #999;"></i>
+                    </div>
+                    <div class="modal-info-grid">
+                        <div class="modal-info-item">
+                            <strong>Location</strong>
+                            Hanoi
+                        </div>
+                        <div class="modal-info-item">
+                            <strong>Age</strong>
+                            8 months
+                        </div>
+                        <div class="modal-info-item">
+                            <strong>Gender</strong>
+                            Male
+                        </div>
+                        <div class="modal-info-item">
+                            <strong>Price</strong>
+                            200,000 VND
+                        </div>
+                    </div>
+                    <div class="modal-description">
+                        <h5 style="color: var(--dark-maroon); font-weight: 700;">About Cam</h5>
+                        <p>Cam is a friendly orange tabby with bright eyes and a curious nature. He loves exploring and is very intelligent. Cam gets along well with children and would make an excellent family pet. He's energetic but also enjoys cuddle time.</p>
+                        <p><strong>Health:</strong> Fully vaccinated, dewormed<br>
+                        <strong>Temperament:</strong> Curious, friendly, intelligent<br>
+                        <strong>Contact:</strong> 0123-456-790</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Filter functionality (basic implementation)
+        function applyFilters() {
+            alert('Filters applied! (This is a prototype - full filtering would be implemented in the final version)');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const catCards = document.querySelectorAll('.cat-card');
+            
+            catCards.forEach(card => {
+                const catName = card.querySelector('h4').textContent.toLowerCase();
+                if (catName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
