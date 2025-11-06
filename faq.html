@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mèow Việt - FAQs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --green: #84994F;
+            --dark-maroon: #3C0008;
+            --warm-yellow: #F4E5A1;
+            --soft-gray: #D9D9D9;
+            --vibrant-orange: #FFA726;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding-top: 100px;
+        }
+        
+        /* Bubble-style Navbar - EXACT same as index.html */
+        .navbar {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 0.6rem 1.5rem;
+            margin: 0.8rem auto;
+            max-width: 720px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(-50%) scale(0.98);
+        }
+
+        .navbar .container-fluid {
+            background: none !important;
+            box-shadow: none !important;
+        }
+
+        .navbar-brand img {
+            height: 45px;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: #000 !important;
+            font-weight: 700;
+            margin: 0 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #5C1E1E !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: #5C1E1E !important;
+            border-bottom: 2px solid #5C1E1E;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 2rem 0 3rem 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h1 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            font-size: 2.8rem;
+            margin: 0;
+        }
+        
+        /* FAQ Container */
+        .faq-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+        
+        /* Search Box */
+        .search-box {
+            position: relative;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 50px;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--dark-maroon);
+            box-shadow: 0 0 0 4px rgba(255, 167, 38, 0.1);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.2rem;
+        }
+        
+        /* Category Filters */
+        .category-filters {
+            text-align: center;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .faq-category {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            border: 2px solid var(--soft-gray);
+            color: #555;
+        }
+        
+        .faq-category:hover {
+            background: var(--warm-yellow);
+            border-color: var(--warm-yellow);
+            color: var(--dark-maroon);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .faq-category.active {
+            background: var(--dark-maroon);
+            color: white;
+            border-color: var(--dark-maroon);
+            box-shadow: 0 5px 15px rgba(92, 30, 30, 0.3);
+        }
+        
+        /* FAQ Sections */
+        .faq-section {
+            background: var(--dark-maroon);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .faq-section h3 {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .faq-section h3 i {
+            font-size: 1.5rem;
+        }
+        
+        /* FAQ Items */
+        .faq-item {
+            background: white;
+            margin: 1rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .faq-item:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--soft-gray);
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        .faq-question:hover {
+            background: var(--warm-yellow);
+        }
+        
+        .faq-question.active {
+            background: var(--warm-yellow);
+        }
+        
+        .faq-question-text {
+            font-weight: 600;
+            color: var(--dark-maroon);
+            font-size: 1.1rem;
+            flex: 1;
+        }
+        
+        .faq-question-icon {
+            font-size: 1.5rem;
+            color: var(--dark-maroon);
+            transition: transform 0.3s;
+            font-weight: bold;
+        }
+        
+        .faq-question.active .faq-question-icon {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            background: var(--warm-yellow);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-answer.show {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+        
+        .faq-answer p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin: 0;
+        }
+        
+        .faq-answer ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .faq-answer li {
+            margin: 0.5rem 0;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-size: 1.2rem;
+            display: none;
+        }
+        
+        .no-results.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="Mèo Ta Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="discover.html">Discover</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html">Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.html">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="faq.html">FAQs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Frequently Asked Questions</h1>
+        </div>
+
+        <div class="faq-container">
+            <!-- Search Box -->
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search by name, breed..." id="searchInput" onkeyup="searchFAQs()">
+            </div>
+
+            <!-- Category Filters -->
+            <div class="category-filters">
+                <div class="faq-category active" onclick="filterCategory('all')">All questions</div>
+                <div class="faq-category" onclick="filterCategory('adoption')">Adoption</div>
+                <div class="faq-category" onclick="filterCategory('care')">Taking care</div>
+                <div class="faq-category" onclick="filterCategory('safety')">Safety</div>
+                <div class="faq-category" onclick="filterCategory('sellers')">For sellers</div>
+            </div>
+
+            <!-- Adoption Section -->
+            <div class="faq-section" data-category="adoption">
+                <h3><i class="bi bi-heart-fill"></i> Adoption</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">How do I adopt a Mèo Ta?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Adopting a Mèo Ta is easy! Browse our marketplace to find cats available for adoption in your area. Contact the seller or shelter directly through the contact information provided. Most sellers will arrange a meeting so you can interact with the cat before making a decision. Make sure to ask about vaccination records, health history, and any specific care requirements.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">What documents do I need for adoption?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Typical documents needed include:</p>
+                        <ul>
+                            <li>Valid identification (ID card or passport)</li>
+                            <li>Proof of residence</li>
+                            <li>Vaccination and health records from the seller</li>
+                            <li>Adoption agreement (if from a shelter)</li>
+                        </ul>
+                        <p>Requirements may vary by seller, so always confirm beforehand.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">What is the typical adoption fee?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Adoption fees for Vietnamese cats typically range from 500,000 to 1,500,000 VND, depending on age, breed characteristics, and whether the cat comes from a breeder or shelter. Shelter adoptions are usually more affordable. The fee often covers initial vaccinations, deworming, and health checks.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Taking Care Section -->
+            <div class="faq-section" data-category="care">
+                <h3><i class="bi bi-bandaid-fill"></i> Taking Care</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">What should I feed my Vietnamese cat?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Vietnamese cats thrive on high-quality cat food (wet or dry) specifically formulated for their age group. Feed kittens 3-4 times daily, adult cats twice daily. Always provide fresh water. Avoid human food, especially fish bones, onions, garlic, chocolate, and dairy products. Some owners supplement with cooked chicken or fish occasionally, but commercial cat food should be the primary diet.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">How often should I take my cat to the vet?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Kittens need veterinary visits every 3-4 weeks until 16 weeks old for vaccinations. Adult cats should have annual check-ups for health monitoring and booster vaccinations. Senior cats (7+ years) benefit from bi-annual visits. Schedule immediate vet visits if you notice unusual behavior, loss of appetite, vomiting, diarrhea, or lethargy.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">Do Vietnamese cats need special grooming?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most Vietnamese cats have short coats requiring minimal grooming. Brush weekly to remove loose fur and reduce hairballs. Long-haired varieties need brushing 2-3 times weekly. Trim nails monthly, clean ears when dirty, and brush teeth 2-3 times weekly with cat toothpaste. Bathing is rarely necessary unless the cat gets very dirty.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">What vaccinations does my cat need?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Essential vaccinations include:</p>
+                        <ul>
+                            <li>FVRCP (feline viral rhinotracheitis, calicivirus, panleukopenia) - starting at 6-8 weeks</li>
+                            <li>Rabies - at 12-16 weeks</li>
+                            <li>FeLV (feline leukemia) - recommended for outdoor cats</li>
+                        </ul>
+                        <p>Consult your veterinarian for a complete vaccination schedule tailored to your cat's lifestyle.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Section -->
+            <div class="faq-section" data-category="safety">
+                <h3><i class="bi bi-shield-fill-check"></i> Safety</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">How can I cat-proof my home?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Cat-proofing essentials:</p>
+                        <ul>
+                            <li>Secure windows and balconies with screens or nets</li>
+                            <li>Remove toxic plants (lilies, aloe, pothos)</li>
+                            <li>Store medications and cleaning products safely</li>
+                            <li>Cover electrical cords or use cord protectors</li>
+                            <li>Remove small objects that could be swallowed</li>
+                            <li>Secure heavy furniture that could tip over</li>
+                            <li>Keep toilet lids closed</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">Is it safe to let my cat outside in Vietnamese cities?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>In urban Vietnamese areas with heavy traffic, it's safer to keep cats indoors. If you want your cat to experience outdoors, consider supervised outings with a harness and leash, or create a secure enclosed balcony or catio. Indoor cats live longer, healthier lives and are protected from traffic accidents, diseases, parasites, and theft.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">What should I do in case of a pet emergency?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Keep your veterinarian's emergency contact number readily available. In Hanoi and Ho Chi Minh City, several 24-hour emergency vet clinics operate. Signs of emergency include difficulty breathing, seizures, severe bleeding, inability to urinate, suspected poisoning, or extreme lethargy. Transport your cat carefully in a secure carrier and call ahead to the emergency clinic so they can prepare.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- For Sellers Section -->
+            <div class="faq-section" data-category="sellers">
+                <h3><i class="bi bi-shop"></i> For Sellers</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">How do I list my cat on the marketplace?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>To list your cat, create an account and submit detailed information including age, breed, health status, temperament, and clear photos. Provide vaccination records and be transparent about any health issues. Set a fair price based on the cat's age, breed, and health. Respond promptly to inquiries and be willing to arrange safe meetings with potential adopters.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">What information should I provide to potential adopters?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Essential information includes:</p>
+                        <ul>
+                            <li>Age, gender, and breed characteristics</li>
+                            <li>Vaccination and deworming history</li>
+                            <li>Spay/neuter status</li>
+                            <li>Temperament and behavior patterns</li>
+                            <li>Any special needs or health conditions</li>
+                            <li>Diet and feeding schedule</li>
+                            <li>Whether cat is litter trained</li>
+                            <li>Compatibility with children and other pets</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span class="faq-question-text">How do I ensure safe transactions?</span>
+                        <span class="faq-question-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Safety tips for sellers: Meet in public places or your home (never at the buyer's location initially). Verify buyer's identity. Screen potential adopters by asking about their experience, living situation, and commitment level. Consider a trial period. Request deposit only after meeting in person. Provide a written agreement including health guarantees and return policies. Never ship cats without meeting the buyer.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Results Message -->
+            <div class="no-results" id="noResults">
+                <i class="bi bi-search" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                No questions found matching your search.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Toggle FAQ Answer
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-question-icon');
+            
+            // Close other open answers in the same section
+            const section = element.closest('.faq-section');
+            const allQuestions = section.querySelectorAll('.faq-question');
+            const allAnswers = section.querySelectorAll('.faq-answer');
+            
+            allQuestions.forEach(q => {
+                if (q !== element) {
+                    q.classList.remove('active');
+                    q.querySelector('.faq-question-icon').textContent = '+';
+                }
+            });
+            
+            allAnswers.forEach(a => {
+                if (a !== answer) {
+                    a.classList.remove('show');
+                }
+            });
+            
+            // Toggle current answer
+            element.classList.toggle('active');
+            answer.classList.toggle('show');
+            icon.textContent = answer.classList.contains('show') ? '−' : '+';
+        }
+
+        // Filter by Category
+        function filterCategory(category) {
+            const categories = document.querySelectorAll('.faq-category');
+            const sections = document.querySelectorAll('.faq-section');
+            
+            categories.forEach(cat => cat.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (category === 'all') {
+                sections.forEach(section => section.style.display = 'block');
+            } else {
+                sections.forEach(section => {
+                    if (section.dataset.category === category) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            document.getElementById('searchInput').value = '';
+        }
+
+        // Search FAQs
+        function searchFAQs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('.faq-section');
+            const noResults = document.getElementById('noResults');
+            let hasResults = false;
+            
+            sections.forEach(section => {
+                const items = section.querySelectorAll('.faq-item');
+                let sectionHasResults = false;
+                
+                items.forEach(item => {
+                    const question = item.querySelector('.faq-question-text').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'block';
+                        sectionHasResults = true;
+                        hasResults = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                section.style.display = sectionHasResults ? 'block' : 'none';
+            });
+            
+            if (hasResults) {
+                noResults.classList.remove('show');
+            } else {
+                noResults.classList.add('show');
+            }
+        }
+    </script>
+</body>
+</html>

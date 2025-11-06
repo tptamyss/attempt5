@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mèow Việt - Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --green: #84994F;
+            --dark-maroon: #3C0008;
+            --warm-yellow: #F4E5A1;
+            --soft-gray: #D9D9D9;
+            --vibrant-orange: #FFA726;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: white;
+            color: #333;
+            padding-top: 100px;
+        }
+        
+        /* Bubble-style Navbar - EXACT same as index.html */
+        .navbar {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 0.6rem 1.5rem;
+            margin: 0.8rem auto;
+            max-width: 720px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(-50%) scale(0.98);
+        }
+
+        .navbar .container-fluid {
+            background: none !important;
+            box-shadow: none !important;
+        }
+
+        .navbar-brand img {
+            height: 45px;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: #000 !important;
+            font-weight: 700;
+            margin: 0 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #5C1E1E !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: #5C1E1E !important;
+            border-bottom: 2px solid #5C1E1E;
+        }
+        
+        /* Quiz Container */
+        .quiz-container {
+            max-width: 900px;
+            margin: 2rem auto;
+        }
+        
+        /* Quiz Header */
+        .quiz-header {
+            background: linear-gradient(135deg, var(--green) 0%, #ff9800 100%);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-icon {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--warm-yellow) 0%, #fff9d4 100%);
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-header h1 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .quiz-header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .start-btn {
+            background: var(--vibrant-orange);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 167, 38, 0.3);
+            margin-top: 1.5rem;
+        }
+        
+        .start-btn:hover {
+            background: #ff9800;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 167, 38, 0.4);
+        }
+        
+        /* Question Section */
+        .question-section {
+            display: none;
+        }
+        
+        .question-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar-container {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--dark-maroon);
+            font-weight: 600;
+        }
+        
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+            background: var(--soft-gray);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--vibrant-orange), #ff9800);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .question-card {
+            background: linear-gradient(135deg, var(--warm-yellow) 0%, #fff9d4 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .question-card h2 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .answer-options {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .answer-option {
+            background: var(--green);
+            padding: 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .answer-option:hover {
+            background: #f5c5c9;
+            transform: translateX(10px);
+            border-color: var(--dark-maroon);
+        }
+        
+        .answer-option.selected {
+            background: var(--dark-maroon);
+            color: white;
+            border-color: var(--dark-maroon);
+        }
+        
+        .answer-option-letter {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--dark-maroon);
+            flex-shrink: 0;
+        }
+        
+        .answer-option.selected .answer-option-letter {
+            background: var(--vibrant-orange);
+            color: white;
+        }
+        
+        .answer-option-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .next-btn {
+            background: var(--dark-maroon);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 2rem auto 0;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .next-btn.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .next-btn.active:hover {
+            background: #8B3A3A;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(92, 30, 30, 0.3);
+        }
+        
+        /* Result Section */
+        .result-section {
+            display: none;
+        }
+        
+        .result-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .result-icon {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--warm-yellow) 0%, #fff9d4 100%);
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .result-content h2 {
+            color: var(--dark-maroon);
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .result-content p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .result-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        
+        .trait-badge {
+            background: var(--vibrant-orange);
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .restart-btn {
+            background: var(--dark-maroon);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 2rem auto;
+        }
+        
+        .restart-btn:hover {
+            background: #8B3A3A;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(92, 30, 30, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .result-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .result-icon {
+                width: 150px;
+                height: 150px;
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="Mèo Ta Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="discover.html">Discover</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html">Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="quiz.html">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faq.html">FAQs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="quiz-container">
+            <!-- Quiz Intro -->
+            <div class="quiz-header" id="quizIntro">
+                <div class="quiz-icon">
+                    <img src="images/cat_quiz2.png" width=200 height=100 alt="Cat Quiz Icon">
+                </div>
+                <h1>Which Mèo Ta is right for you?</h1>
+                <p>Answer a few questions to discover your perfect Vietnamese cat match!</p>
+                <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <!-- Question Section -->
+            <div class="question-section" id="questionSection">
+                <div class="progress-bar-container">
+                    <div class="progress-text">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">5</span></div>
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width: 20%"></div>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <h2 id="questionText">What's your living situation?</h2>
+                    <div class="answer-options" id="answerOptions">
+                    </div>
+                </div>
+
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question</button>
+            </div>
+
+            <!-- Result Section -->
+            <div class="result-section" id="resultSection">
+                <div class="result-card">
+                    <div class="result-icon" id="resultIcon">
+                    </div>
+                    <div class="result-content">
+                        <h2 id="resultTitle">Your Mèo Ta is:</h2>
+                        <p id="resultDescription"></p>
+                        <div class="result-traits" id="resultTraits">
+                            <!-- Traits will be added by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Quiz data
+        const questions = [
+            {
+                question: "What's your living situation?",
+                options: [
+                    { text: "Small apartment in the city", value: "calm" },
+                    { text: "House with a yard", value: "active" },
+                    { text: "Medium-sized apartment", value: "balanced" },
+                    { text: "Shared living space", value: "social" }
+                ]
+            },
+            {
+                question: "How much time can you dedicate to your cat daily?",
+                options: [
+                    { text: "I'm home most of the time", value: "social" },
+                    { text: "A few hours in the evening", value: "balanced" },
+                    { text: "I work long hours but weekends are free", value: "independent" },
+                    { text: "I work from home", value: "active" }
+                ]
+            },
+            {
+                question: "What's your ideal cat personality?",
+                options: [
+                    { text: "Playful and energetic", value: "active" },
+                    { text: "Calm and cuddly", value: "calm" },
+                    { text: "Independent but affectionate", value: "independent" },
+                    { text: "Social and friendly", value: "social" }
+                ]
+            },
+            {
+                question: "How do you feel about cat grooming?",
+                options: [
+                    { text: "I love grooming and don't mind daily brushing", value: "active" },
+                    { text: "Weekly grooming is perfect", value: "balanced" },
+                    { text: "Minimal grooming preferred", value: "independent" },
+                    { text: "As long as they're clean, I'm happy", value: "calm" }
+                ]
+            },
+            {
+                question: "What's your experience with cats?",
+                options: [
+                    { text: "First time cat owner", value: "calm" },
+                    { text: "I've had cats before", value: "balanced" },
+                    { text: "Very experienced with cats", value: "active" },
+                    { text: "Grew up with cats", value: "social" }
+                ]
+            }
+        ];
+
+        const catResults = {
+            calm: {
+                name: "Mèo Mướp (Tabby)",
+                description: "The gentle and laid-back Mèo Mướp is perfect for you! These cats are known for their calm demeanor and adaptability. They're content with quiet environments and make excellent companions for apartment living. Mướp cats are low-maintenance, independent, yet affectionate when they want to be.",
+                traits: ["Calm", "Independent", "Adaptable", "Low-maintenance"]
+            },
+            active: {
+                name: "Mèo Cam (Orange/Ginger)",
+                description: "The energetic and playful Mèo Cam matches your lifestyle! Orange cats are known for their friendly, outgoing personalities and love of play. They're intelligent, curious, and need plenty of interaction and stimulation. Perfect for active households who can provide lots of attention and playtime.",
+                traits: ["Energetic", "Playful", "Intelligent", "Outgoing"]
+            },
+            independent: {
+                name: "Mèo Mun (Black Cat)",
+                description: "The elegant and independent Mèo Mun is your ideal match! Black cats are known for their mysterious charm and self-sufficient nature. They're affectionate on their own terms and adapt well to owners with busy schedules. Mun cats are low-drama, elegant, and bring good fortune according to Vietnamese beliefs.",
+                traits: ["Independent", "Elegant", "Lucky", "Low-drama"]
+            },
+            social: {
+                name: "Mèo Tam Thể (Calico/Tri-color)",
+                description: "The vibrant and social Mèo Tam Thể is perfect for you! These tri-colored beauties are known for their strong personalities and social nature. They love being around people and other pets, making them ideal for families or multi-pet households. Tam Thể cats are talkative, affectionate, and full of character.",
+                traits: ["Social", "Affectionate", "Talkative", "Family-friendly"]
+            },
+            balanced: {
+                name: "Mèo Trắng (White Cat)",
+                description: "The balanced and graceful Mèo Trắng suits you perfectly! White cats are known for their gentle temperament and balanced personality. They're neither too clingy nor too independent, making them versatile companions. Trắng cats are adaptable, peaceful, and bring a sense of serenity to any home.",
+                traits: ["Balanced", "Graceful", "Peaceful", "Versatile"]
+            }
+        };
+
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let selectedAnswer = null;
+
+        function startQuiz() {
+            document.getElementById('quizIntro').style.display = 'none';
+            document.getElementById('questionSection').classList.add('active');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = questions.length;
+            
+            const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+
+            const optionsContainer = document.getElementById('answerOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'answer-option';
+                optionDiv.innerHTML = `
+                    <div class="answer-option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="answer-option-text">${option.text}</div>
+                `;
+                optionDiv.onclick = () => selectAnswer(index, option.value);
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            selectedAnswer = null;
+            document.getElementById('nextBtn').classList.remove('active');
+        }
+
+        function selectAnswer(index, value) {
+            const options = document.querySelectorAll('.answer-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            selectedAnswer = value;
+            document.getElementById('nextBtn').classList.add('active');
+        }
+
+        function nextQuestion() {
+            if (!selectedAnswer) return;
+            
+            answers.push(selectedAnswer);
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('questionSection').classList.remove('active');
+            document.getElementById('resultSection').classList.add('active');
+
+            // Count answer types
+            const counts = {};
+            answers.forEach(answer => {
+                counts[answer] = (counts[answer] || 0) + 1;
+            });
+
+            // Find most common answer type
+            let maxCount = 0;
+            let resultType = 'balanced';
+            for (const [type, count] of Object.entries(counts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    resultType = type;
+                }
+            }
+
+            const result = catResults[resultType];
+            
+            document.getElementById('resultIcon').textContent = result.icon;
+            document.getElementById('resultTitle').textContent = result.name;
+            document.getElementById('resultDescription').textContent = result.description;
+
+            const traitsContainer = document.getElementById('resultTraits');
+            traitsContainer.innerHTML = '';
+            result.traits.forEach(trait => {
+                const badge = document.createElement('span');
+                badge.className = 'trait-badge';
+                badge.textContent = trait;
+                traitsContainer.appendChild(badge);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            answers = [];
+            selectedAnswer = null;
+            
+            document.getElementById('resultSection').classList.remove('active');
+            document.getElementById('quizIntro').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
